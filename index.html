@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación de Salud y Consejos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #1abc9c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #16a085;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .info {
+            margin-top: 20px;
+            color: #2980b9;
+        }
+        .icon {
+            font-size: 1.5em;
+            margin-right: 8px;
+        }
+        .green { color: green; }
+        .yellow { color: #f1c40f; }
+        .red { color: #e74c3c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Evaluación de Salud y Consejos</h1>
+    <p>Introduce tus datos:</p>
+    <input type="number" id="circunferencia" placeholder="Circunferencia abdominal (cm)">
+    <input type="number" id="altura" placeholder="Altura (cm)">
+    <input type="number" id="peso" placeholder="Peso (kg)">
+    <button onclick="calcularSalud()">Evaluar Salud</button>
+    <div class="result" id="resultado"></div>
+    <div class="info" id="infoEnfermedades"></div>
+    <div class="info" id="dietaActividad"></div>
+</div>
+
+<script>
+    function calcularSalud() {
+        const circunferencia = parseFloat(document.getElementById('circunferencia').value);
+        const altura = parseFloat(document.getElementById('altura').value);
+        const peso = parseFloat(document.getElementById('peso').value);
+        const resultado = document.getElementById('resultado');
+        const infoEnfermedades = document.getElementById('infoEnfermedades');
+        const dietaActividad = document.getElementById('dietaActividad');
+
+        if (!circunferencia || !altura || !peso) {
+            resultado.innerHTML = 'Por favor, completa todos los campos.';
+            infoEnfermedades.innerHTML = '';
+            dietaActividad.innerHTML = '';
+            return;
+        }
+
+        const imc = (peso / Math.pow(altura / 100, 2)).toFixed(2);
+
+        let riesgoCardiaco = '';
+        let posiblesEnfermedades = '';
+        let dietaSugerida = '';
+        let actividadSugerida = '';
+        let color = '';
+        let icono = '';
+
+        if (circunferencia < 94) {
+            riesgoCardiaco = 'Riesgo bajo de enfermedades cardíacas.';
+            posiblesEnfermedades = 'Peso saludable. Mantén una alimentación equilibrada y actividad física regular.';
+            dietaSugerida = 'Dieta balanceada rica en frutas, verduras, proteínas magras y carbohidratos saludables.';
+            actividadSugerida = 'Ejercicio moderado 30 minutos al día, como caminar o correr.';
+            color = 'green';
+            icono = '✔️';
+        } else if (circunferencia >= 94 && circunferencia <= 102) {
+            riesgoCardiaco = 'Riesgo moderado de enfermedades cardíacas.';
+            posiblesEnfermedades = 'Riesgo de sobrepeso. Considera mejorar tu dieta y aumentar la actividad física.';
+            dietaSugerida = 'Reducir el consumo de azúcares y grasas saturadas, aumentar fibra y proteínas.';
+            actividadSugerida = 'Ejercicio moderado-alto, al menos 45 minutos diarios (caminar rápido, bicicleta).';
+            color = 'yellow';
+            icono = '⚠️';
+        } else {
+            riesgoCardiaco = 'Riesgo alto de enfermedades cardíacas.';
+            posiblesEnfermedades = 'Alto riesgo de obesidad, diabetes, hipertensión. Consulta a tu médico inmediatamente.';
+            dietaSugerida = 'Dieta estricta supervisada por un profesional, bajo consumo de calorías, alta fibra.';
+            actividadSugerida = 'Ejercicio intenso bajo supervisión, actividades como natación o caminatas largas.';
+            color = 'red';
+            icono = '⛔';
+        }
+
+        resultado.innerHTML = `<span class="${color} icon">${icono}</span>${riesgoCardiaco}`;
+        infoEnfermedades.innerHTML = `IMC: ${imc}. ${posiblesEnfermedades}`;
+        dietaActividad.innerHTML = `Dieta sugerida: ${dietaSugerida} <br> Actividad física recomendada: ${actividadSugerida} <br> <strong>Recuerda consultar a tu médico antes de iniciar cualquier plan.</strong>`;
+    }
+</script>
+
+</body>
+</html>
